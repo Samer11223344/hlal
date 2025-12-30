@@ -9,77 +9,83 @@
     <style>
         body { font-family: 'Cairo', sans-serif; background: #050505; color: white; overflow-x: hidden; }
         .glass-panel { background: rgba(20, 20, 20, 0.8); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.05); }
-        .red-glow:hover { box-shadow: 0 0 20px rgba(239, 68, 68, 0.3); }
-        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 1000; align-items: center; justify-content: center; }
-        .modal.active { display: flex; }
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 1000; align-items: center; justify-content: center; backdrop-filter: blur(10px); }
+        .modal.active { display: flex; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .status-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; margin-left: 5px; }
     </style>
 </head>
 <body class="min-h-screen">
 
-    <section id="loginSection" class="h-screen flex items-center justify-center p-4">
-        <div class="glass-panel p-12 rounded-[40px] w-full max-w-lg text-center border-t-4 border-red-600">
+    <section id="loginSection" class="h-screen flex items-center justify-center p-4 text-center">
+        <div class="glass-panel p-12 rounded-[40px] w-full max-w-lg border-t-4 border-red-600 shadow-2xl">
             <div class="text-7xl mb-6">🚑</div>
-            <h1 class="text-3xl font-black mb-2 tracking-tighter">بوابة الهلال الأحمر</h1>
-            <p class="text-gray-500 mb-10 italic">DAVIS MEDICAL CENTER SYSTEM</p>
+            <h1 class="text-3xl font-black mb-2 italic">بوابة الهلال الأحمر</h1>
+            <p class="text-gray-500 mb-10 text-sm tracking-widest uppercase">Personnel & Management Portal</p>
             <button onclick="discordLogin()" class="w-full bg-[#5865F2] hover:bg-white hover:text-[#5865F2] py-5 rounded-2xl font-black text-xl transition-all shadow-xl flex items-center justify-center gap-3">
-                <span>تسجيل الدخول عبر الديسكورد</span>
+                <span>المصادقة عبر الديسكورد</span>
             </button>
-            <p id="accessDenied" class="hidden mt-6 text-red-500 font-bold animate-pulse text-sm">عذراً، لا تملك رتبة إدارة الهلال للدخول!</p>
+            <p id="accessDenied" class="hidden mt-6 text-red-500 font-bold animate-pulse">عذراً، لا تملك الصلاحيات الكافية للدخول</p>
         </div>
     </section>
 
     <main id="mainSystem" class="hidden p-8 max-w-7xl mx-auto space-y-8">
         
-        <header class="flex justify-between items-center glass-panel p-6 rounded-3xl border-b border-red-500/30">
+        <header class="flex justify-between items-center glass-panel p-6 rounded-3xl border-b border-red-500/20">
             <div class="flex items-center gap-4">
-                <img id="userAvatar" class="w-16 h-16 rounded-full border-2 border-red-600 shadow-lg">
+                <img id="userAvatar" class="w-16 h-16 rounded-2xl border-2 border-red-600 shadow-2xl">
                 <div>
-                    <h2 id="userName" class="text-2xl font-black">--</h2>
-                    <span class="bg-red-600/20 text-red-500 px-3 py-0.5 rounded text-[10px] font-bold">موظف مصرح</span>
+                    <h2 id="userName" class="text-2xl font-black italic text-red-600 uppercase tracking-tighter">--</h2>
+                    <div id="userRoleTag" class="text-[10px] font-black bg-white/10 px-2 py-0.5 rounded">تحميل الرتبة...</div>
                 </div>
             </div>
-            <button onclick="location.reload()" class="bg-white/5 hover:bg-red-600 px-6 py-2 rounded-xl text-sm font-bold transition">خروج</button>
+            <button onclick="location.reload()" class="bg-red-600/10 text-red-500 hover:bg-red-600 hover:text-white px-6 py-2 rounded-xl text-sm font-black transition-all">تسجيل الخروج</button>
         </header>
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div class="glass-panel p-8 rounded-[40px] border-r-8 border-green-600">
-                <h3 class="text-xl font-black mb-6 italic">سجل المناوبة_</h3>
+            <div class="glass-panel p-8 rounded-[40px] border-r-8 border-green-600 shadow-xl">
+                <h3 class="text-xl font-black mb-6 italic border-b border-white/5 pb-2 uppercase">Time_Clock</h3>
                 <div class="space-y-4">
-                    <button onclick="sendDutyLog('حضور ✅')" class="w-full bg-green-600 hover:bg-green-700 py-10 rounded-3xl font-black text-3xl transition-all">حضور</button>
-                    <button onclick="sendDutyLog('انصراف ❌')" class="w-full border border-red-600/30 hover:bg-red-600 py-10 rounded-3xl font-black text-3xl transition-all">انصراف</button>
+                    <button onclick="sendDutyLog('حضور ✅')" class="w-full bg-green-600 hover:bg-green-700 py-8 rounded-3xl font-black text-2xl transition-all shadow-lg">تسجيل حضور</button>
+                    <button onclick="sendDutyLog('انصراف ❌')" class="w-full border border-red-600/30 hover:bg-red-600 py-8 rounded-3xl font-black text-2xl transition-all">تسجيل انصراف</button>
                 </div>
             </div>
 
-            <div id="recruitmentCard" class="hidden glass-panel p-8 rounded-[40px] border-r-8 border-blue-600 flex flex-col justify-center text-center">
+            <div id="recruitmentCard" class="hidden glass-panel p-8 rounded-[40px] border-r-8 border-blue-600 text-center flex flex-col justify-center">
                 <div class="text-6xl mb-4">🎖️</div>
-                <h3 class="text-2xl font-black mb-4">قسم التوظيف</h3>
-                <p class="text-gray-500 text-sm mb-6">إضافة موظفين جدد للنظام وتغيير رتبهم</p>
-                <button onclick="toggleModal('recruitModal', true)" class="bg-blue-600 hover:bg-blue-700 py-4 rounded-2xl font-black text-lg transition-all shadow-lg">بدء التوظيف</button>
+                <h3 class="text-2xl font-black mb-2 uppercase">Hire_System</h3>
+                <p class="text-gray-500 text-sm mb-6 font-bold">إصدار قرارات توظيف فورية ومزامنة البيانات</p>
+                <button onclick="toggleModal('recruitModal', true)" class="bg-blue-600 hover:bg-blue-700 py-4 rounded-2xl font-black text-lg transition-all shadow-xl">بدء إجراءات التوظيف</button>
             </div>
 
             <div class="glass-panel p-8 rounded-[40px] border-r-8 border-yellow-500 flex flex-col justify-center">
-                <h4 class="text-gray-500 font-bold mb-2">إجمالي الكادر</h4>
-                <div class="text-6xl font-black" id="totalStaff">0</div>
-                <p class="text-xs text-yellow-500 mt-4">نظام الهلال الأحمر - النسخة الاحترافية</p>
+                <h4 class="text-gray-500 font-black mb-2 uppercase tracking-widest text-xs">Total_Medical_Staff</h4>
+                <div class="text-7xl font-black italic text-yellow-500" id="totalStaff">0</div>
+                <p class="text-[10px] text-gray-500 mt-4 italic">النظام محدث لعام 2025 - Davis Server</p>
             </div>
         </div>
 
-        <div class="glass-panel rounded-[40px] overflow-hidden">
-            <div class="p-8 border-b border-white/5">
-                <h3 class="text-2xl font-black italic uppercase tracking-tighter text-red-600">Personnel_Database</h3>
+        <div class="glass-panel rounded-[40px] overflow-hidden shadow-2xl border border-white/5">
+            <div class="p-8 border-b border-white/5 bg-white/5 flex justify-between items-center">
+                <h3 class="text-2xl font-black italic uppercase tracking-tighter text-red-600">Personnel_Registry</h3>
+                <div class="flex gap-2">
+                    <div class="flex items-center gap-1 text-[10px] font-bold text-green-500"><span class="status-dot bg-green-500"></span> متصل</div>
+                    <div class="flex items-center gap-1 text-[10px] font-bold text-red-500"><span class="status-dot bg-red-500"></span> غير متصل</div>
+                </div>
             </div>
             <div class="overflow-x-auto">
                 <table class="w-full text-right">
-                    <thead class="bg-white/5 text-gray-400 text-xs uppercase">
+                    <thead class="bg-white/5 text-gray-500 text-[10px] font-black uppercase tracking-widest">
                         <tr>
                             <th class="p-6">الاسم الميداني</th>
-                            <th class="p-6">الرتبة الحالية</th>
-                            <th class="p-6">كود اللاعب</th>
+                            <th class="p-6">الرتبة</th>
+                            <th class="p-6">الكود الميداني</th>
                             <th class="p-6">آيدي الديسكورد</th>
-                            <th class="p-6">الحالة</th>
+                            <th class="p-6">الحالة الحية</th>
+                            <th class="p-6">إجراءات</th>
                         </tr>
                     </thead>
-                    <tbody id="staffTableBody">
+                    <tbody id="staffTableBody" class="font-bold">
                         </tbody>
                 </table>
             </div>
@@ -87,49 +93,59 @@
     </main>
 
     <div id="recruitModal" class="modal">
-        <div class="glass-panel p-10 rounded-[50px] w-full max-w-2xl border border-blue-600/30">
-            <h2 class="text-3xl font-black mb-8 text-blue-500 italic">إصدار قرار توظيف_</h2>
-            <div class="grid grid-cols-2 gap-6">
-                <div class="space-y-4">
-                    <label class="text-xs font-bold text-gray-500 mr-2">آيدي الديسكورد</label>
-                    <input type="text" id="recruitDiscordId" placeholder="1455..." class="w-full bg-white/5 border border-white/10 p-4 rounded-2xl outline-none focus:border-blue-500 font-bold">
-                    
-                    <label class="text-xs font-bold text-gray-500 mr-2">الاسم الميداني</label>
-                    <input type="text" id="recruitName" placeholder="مثلاً: محمد القحطاني" class="w-full bg-white/5 border border-white/10 p-4 rounded-2xl outline-none focus:border-blue-500 font-bold">
+        <div class="glass-panel p-12 rounded-[60px] w-full max-w-2xl border border-blue-600/30 relative">
+            <h2 class="text-4xl font-black mb-10 text-blue-500 italic uppercase">New_Recruitment_Order</h2>
+            
+            <div class="grid grid-cols-2 gap-8">
+                <div class="space-y-6">
+                    <div>
+                        <label class="text-[10px] font-black text-gray-500 mr-2 uppercase tracking-widest">Discord User ID</label>
+                        <input type="text" id="recruitDiscordId" placeholder="1455..." class="w-full bg-white/5 border border-white/10 p-5 rounded-2xl outline-none focus:border-blue-500 font-bold transition-all">
+                    </div>
+                    <div>
+                        <label class="text-[10px] font-black text-gray-500 mr-2 uppercase tracking-widest">Field Name</label>
+                        <input type="text" id="recruitName" placeholder="مثلاً: سامر القحطاني" class="w-full bg-white/5 border border-white/10 p-5 rounded-2xl outline-none focus:border-blue-500 font-bold">
+                    </div>
                 </div>
-                <div class="space-y-4">
-                    <label class="text-xs font-bold text-gray-500 mr-2">كود اللاعب</label>
-                    <input type="text" id="recruitPlayerId" placeholder="مثلاً: 101" class="w-full bg-white/5 border border-white/10 p-4 rounded-2xl outline-none focus:border-blue-500 font-bold text-center text-2xl text-blue-500">
-                    
-                    <label class="text-xs font-bold text-gray-500 mr-2">الرتبة الممنوحة</label>
-                    <select id="recruitRank" class="w-full bg-white/10 border border-white/10 p-4 rounded-2xl outline-none font-bold">
-                        <option value="متدرب">متدرب</option>
-                        <option value="مسعف">مسعف</option>
-                        <option value="قائد ميداني">قائد ميداني</option>
-                        <option value="إدارة">إدارة</option>
-                    </select>
+                <div class="space-y-6">
+                    <div>
+                        <label class="text-[10px] font-black text-gray-500 mr-2 uppercase tracking-widest">Personnel Code</label>
+                        <input type="text" id="recruitPlayerId" placeholder="كود اللاعب" class="w-full bg-white/5 border border-white/10 p-5 rounded-2xl outline-none focus:border-blue-500 font-black text-center text-3xl text-blue-500">
+                    </div>
+                    <div>
+                        <label class="text-[10px] font-black text-gray-500 mr-2 uppercase tracking-widest">Medical Rank</label>
+                        <select id="recruitRank" class="w-full bg-white/10 border border-white/10 p-5 rounded-2xl outline-none font-black text-sm">
+                            <option value="متدرب">متدرب | Trainee</option>
+                            <option value="مسعف ميداني">مسعف ميداني | EMT</option>
+                            <option value="خبير مسعف">خبير مسعف | Paramedic</option>
+                            <option value="قائد ميداني">قائد ميداني | Captain</option>
+                            <option value="إدارة الهلال">إدارة الهلال | Chief</option>
+                        </select>
+                    </div>
                 </div>
             </div>
-            <div class="flex gap-4 mt-10">
-                <button onclick="processRecruitment()" class="flex-1 bg-blue-600 py-4 rounded-2xl font-black text-xl shadow-xl hover:scale-105 transition-all">تثبيت الموظف ونشر القرار</button>
-                <button onclick="toggleModal('recruitModal', false)" class="bg-white/5 px-8 rounded-2xl font-bold">إلغاء</button>
+            
+            <div class="flex gap-4 mt-12">
+                <button onclick="processRecruitment()" class="flex-1 bg-blue-600 hover:bg-blue-500 py-5 rounded-[25px] font-black text-2xl shadow-2xl transition-all hover:scale-[1.02]">تفعيل التوظيف ونشر القرار 🚀</button>
+                <button onclick="toggleModal('recruitModal', false)" class="bg-white/5 hover:bg-white/10 px-10 rounded-[25px] font-black transition-all">إلغاء</button>
             </div>
         </div>
     </div>
 
     <script>
+        // إعدادات النظام
         const CONFIG = {
-            CLIENT_ID: '1385857180036632577', // آيدي تطبيقك
-            GUILD_ID: '1385853276485845084', // آيدي سيرفرك
+            CLIENT_ID: '1385857180036632577',
+            GUILD_ID: '1385853276485845084',
             BOT_TOKEN: 'MTM4NTg1NzE4MDAzNjYzMjU3Nw.G-dhyh.gSAE58akzsp4waaNGlNeYpEZxDUfjyNVmGAsXk',
-            ROLE_HELL: '1448772434940395621', // إدارة الهلال (للدخول)
-            ROLE_RECRUITER: '1455665513286860820', // مسؤول توظيف (لقسم التوظيف)
+            ROLE_HELL: '1448772434940395621', // رتبة دخول الهلال
+            ROLE_RECRUITER: '1448772434940395621', // رتبة مسؤول التوظيف (حسب طلبك هي نفسها رتبة الإدارة)
             WEBHOOK_DUTY: 'https://discordapp.com/api/webhooks/1455673493571113092/u1bo8mSUeVAKESMe1b2LYadcbiU0m9LEhgBrM9Vjl4qyq9qJRQozr_lqpcGpRZ7UzOfu',
             WEBHOOK_RECRUIT: 'https://discordapp.com/api/webhooks/1455674711110451358/BJiZOQ3b-butqHiOdyeKnjSPnKzjXhXzhKu5QOSlvPlHsnpQQuYFMJUh9-BB4TbI4iOc'
         };
 
         let currentUser = null;
-        let staffDatabase = JSON.parse(localStorage.getItem('davis_medical_staff')) || [];
+        let staffDatabase = JSON.parse(localStorage.getItem('davis_medical_staff_v2')) || [];
 
         function discordLogin() {
             const redirectUri = encodeURIComponent(window.location.href.split('#')[0]);
@@ -155,7 +171,7 @@
                     currentUser = data;
                     initSystem();
                 } catch (e) {
-                    console.error("خطأ في التحقق من الرتب");
+                    console.error("خطأ في الاتصال");
                 }
             }
         };
@@ -165,8 +181,8 @@
             document.getElementById('mainSystem').classList.remove('hidden');
             document.getElementById('userName').innerText = currentUser.nick || currentUser.user.username;
             document.getElementById('userAvatar').src = `https://cdn.discordapp.com/avatars/${currentUser.user.id}/${currentUser.user.avatar}.png`;
+            document.getElementById('userRoleTag').innerText = currentUser.roles.includes(CONFIG.ROLE_RECRUITER) ? "مسؤول توظيف معتمد" : "موظف ميداني";
 
-            // إظهار قسم التوظيف للمسؤولين فقط
             if (currentUser.roles.includes(CONFIG.ROLE_RECRUITER)) {
                 document.getElementById('recruitmentCard').classList.remove('hidden');
             }
@@ -181,8 +197,9 @@
                 fields: [
                     { name: "الموظف", value: `<@${currentUser.user.id}>`, inline: true },
                     { name: "الحالة", value: `**${status}**`, inline: true },
-                    { name: "الوقت", value: new Date().toLocaleTimeString('ar-SA'), inline: true }
+                    { name: "الوقت الحالي", value: new Date().toLocaleTimeString('ar-SA'), inline: true }
                 ],
+                footer: { text: "Davis Hub System" },
                 timestamp: new Date()
             };
 
@@ -191,7 +208,7 @@
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ embeds: [embed] })
             });
-            alert(`تم تسجيل ${status} بنجاح!`);
+            alert(`تم تسجيل ${status} وإرساله للديسكورد`);
         }
 
         async function processRecruitment() {
@@ -200,63 +217,82 @@
             const pId = document.getElementById('recruitPlayerId').value;
             const rank = document.getElementById('recruitRank').value;
 
-            if (!dId || !name || !pId) return alert("يرجى إكمال جميع البيانات!");
+            if (!dId || !name || !pId) return alert("يرجى إدخال كافة بيانات الموظف!");
 
-            const newStaff = { dId, name, pId, rank, date: new Date().toLocaleDateString() };
+            const newStaff = { dId, name, pId, rank, id: Date.now() };
             staffDatabase.push(newStaff);
-            localStorage.setItem('davis_medical_staff', JSON.stringify(staffDatabase));
+            localStorage.setItem('davis_medical_staff_v2', JSON.stringify(staffDatabase));
 
-            // إرسال ويبهوك التوظيف
+            // إرسال الويبهوك الخاص بالتوظيف بجميع المعلومات
             await fetch(CONFIG.WEBHOOK_RECRUIT, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     embeds: [{
-                        title: "📜 قرار توظيف جديد",
+                        title: "📜 قرار توظيف رسمي | الهلال الأحمر",
                         color: 0x3b82f6,
+                        thumbnail: { url: `https://cdn.discordapp.com/avatars/${dId}/avatar.png` },
                         fields: [
-                            { name: "👤 اسم الموظف", value: name, inline: true },
-                            { name: "🔢 كود اللاعب", value: pId, inline: true },
-                            { name: "🎖️ الرتبة", value: rank, inline: true },
-                            { name: "🆔 ديسكورد", value: `<@${dId}>`, inline: false },
-                            { name: "✍️ المسؤول", value: currentUser.user.username, inline: true }
+                            { name: "👤 اسم الموظف الميداني", value: `**${name}**`, inline: true },
+                            { name: "🔢 كود اللاعب", value: `**#${pId}**`, inline: true },
+                            { name: "🆔 آيدي الديسكورد", value: `\`${dId}\``, inline: true },
+                            { name: "🎖️ الرتبة الممنوحة", value: `**${rank}**`, inline: false },
+                            { name: "✍️ المسؤول المصدر للقرار", value: currentUser.user.username, inline: true }
                         ],
                         timestamp: new Date()
                     }]
                 })
             });
 
-            alert("✅ تم توظيف اللاعب ونشر القرار بنجاح");
+            alert("✅ تم التوظيف وحفظ البيانات ونشر القرار");
             toggleModal('recruitModal', false);
             renderStaffTable();
+            
+            // تنظيف الحقول
+            document.getElementById('recruitDiscordId').value = "";
+            document.getElementById('recruitName').value = "";
+            document.getElementById('recruitPlayerId').value = "";
         }
 
         async function renderStaffTable() {
             const tbody = document.getElementById('staffTableBody');
             document.getElementById('totalStaff').innerText = staffDatabase.length;
-            tbody.innerHTML = "";
+            tbody.innerHTML = '<tr><td colspan="6" class="p-10 text-center animate-pulse">جاري فحص حالة الموظفين...</td></tr>';
 
+            let tableRows = "";
             for (const staff of staffDatabase) {
-                // فحص حالة الاتصال بالديسكورد
-                let statusHtml = `<span class="text-gray-500">جاري الفحص...</span>`;
+                let statusDot = '<span class="status-dot bg-red-500"></span> غير متصل';
+                
                 try {
                     const res = await fetch(`https://discord.com/api/guilds/${CONFIG.GUILD_ID}/members/${staff.dId}`, {
                         headers: { Authorization: `Bot ${CONFIG.BOT_TOKEN}` }
                     });
-                    statusHtml = res.status === 200 
-                        ? `<span class="text-green-500 font-bold">● متصل</span>` 
-                        : `<span class="text-red-600 font-bold">○ غير متصل</span>`;
-                } catch (e) { statusHtml = "خطأ"; }
+                    if (res.status === 200) {
+                        statusDot = '<span class="status-dot bg-green-500"></span> متصل حالياً';
+                    }
+                } catch (e) { console.error("Discord API Error"); }
 
-                tbody.innerHTML += `
-                    <tr class="border-b border-white/5 hover:bg-white/5 transition">
-                        <td class="p-6 font-bold text-lg">${staff.name}</td>
-                        <td class="p-6"><span class="bg-red-500/10 text-red-500 px-3 py-1 rounded-lg font-black text-[10px]">${staff.rank}</span></td>
-                        <td class="p-6 font-mono text-yellow-500 font-black">#${staff.pId}</td>
-                        <td class="p-6 text-xs text-gray-500">${staff.dId}</td>
-                        <td class="p-6">${statusHtml}</td>
+                tableRows += `
+                    <tr class="border-b border-white/5 hover:bg-white/5 transition-all group">
+                        <td class="p-6 font-black text-white">${staff.name}</td>
+                        <td class="p-6"><span class="bg-blue-600/10 text-blue-500 px-3 py-1 rounded text-[10px]">${staff.rank}</span></td>
+                        <td class="p-6 font-black text-yellow-500 italic">#${staff.pId}</td>
+                        <td class="p-6 text-gray-500 text-xs">${staff.dId}</td>
+                        <td class="p-6 font-bold text-sm">${statusDot}</td>
+                        <td class="p-6 text-left">
+                            <button onclick="removeStaff(${staff.id})" class="text-red-500 opacity-0 group-hover:opacity-100 hover:scale-110 transition-all">✕ فصل</button>
+                        </td>
                     </tr>
                 `;
+            }
+            tbody.innerHTML = tableRows || '<tr><td colspan="6" class="p-10 text-center text-gray-500 italic">لا يوجد موظفين مسجلين حالياً</td></tr>';
+        }
+
+        function removeStaff(id) {
+            if (confirm("هل أنت متأكد من فصل هذا الموظف؟")) {
+                staffDatabase = staffDatabase.filter(s => s.id !== id);
+                localStorage.setItem('davis_medical_staff_v2', JSON.stringify(staffDatabase));
+                renderStaffTable();
             }
         }
 
