@@ -10,7 +10,6 @@
         body { font-family: 'Cairo', sans-serif; background-color: #0a0a0a; color: white; overflow-x: hidden; }
         .glass { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
         .red-gradient { background: linear-gradient(135deg, #ef4444 0%, #991b1b 100%); }
-        .user-chip { background: rgba(88, 101, 242, 0.2); border: 1px solid rgba(88, 101, 242, 0.4); }
         .admin-glow { border-color: #3b82f6 !important; box-shadow: 0 0 15px rgba(59, 130, 246, 0.3); }
     </style>
 </head>
@@ -21,74 +20,63 @@
             <img id="userAvatar" src="" class="w-12 h-12 rounded-full border-2 border-red-500 shadow-lg shadow-red-500/20">
             <div>
                 <p class="text-xs text-gray-400">مرحباً بك،</p>
-                <p id="userName" class="font-bold text-lg text-white font-sans tracking-wide">جاري التحميل...</p>
+                <p id="userName" class="font-bold text-lg text-white">جاري التحميل...</p>
             </div>
         </div>
-        <button onclick="logout()" class="text-xs bg-red-500/10 text-red-500 px-4 py-2 rounded-lg hover:bg-red-500 hover:text-white transition">تسجيل خروج</button>
+        <button onclick="logout()" class="text-xs bg-red-500/10 text-red-500 px-4 py-2 rounded-lg hover:bg-red-500 transition">تسجيل خروج</button>
     </div>
 
-    <div id="loginSection" class="glass p-8 rounded-3xl w-full max-w-md shadow-2xl mt-20">
+    <div id="loginSection" class="glass p-8 rounded-3xl w-full max-w-md shadow-2xl mt-20 border-t-4 border-red-600">
         <div class="text-center mb-8">
-            <div class="inline-block p-4 rounded-full bg-red-600/20 mb-4 animate-pulse">
-                <span class="text-4xl">🚑</span>
-            </div>
-            <h2 class="text-2xl font-bold">بوابة موظفي الهلال الأحمر</h2>
-            <p class="text-gray-400 text-sm mt-2">يرجى ربط الحساب للتحقق من الصلاحيات</p>
+            <div class="inline-block p-4 rounded-full bg-red-600/20 mb-4 animate-pulse text-4xl">🚑</div>
+            <h2 class="text-2xl font-bold">بوابة الهلال الأحمر</h2>
+            <p class="text-gray-400 text-sm mt-2">يرجى تسجيل الدخول عبر ديسكورد</p>
         </div>
-
-        <button onclick="discordLogin()" class="w-full bg-[#5865F2] hover:bg-[#4752c4] text-white py-4 rounded-xl font-bold mb-4 flex items-center justify-center gap-3 transition-all shadow-lg shadow-blue-500/20">
-            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128c.125-.094.252-.192.37-.29a.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.196.373.29a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
+        <button onclick="discordLogin()" class="w-full bg-[#5865F2] hover:bg-[#4752c4] text-white py-4 rounded-xl font-bold flex items-center justify-center gap-3 transition-all">
             <span>تسجيل الدخول بالديسكورد</span>
         </button>
     </div>
 
     <div id="codeSection" class="hidden glass p-8 rounded-3xl w-full max-w-md shadow-2xl mt-20">
-        <h2 class="text-xl font-bold text-center mb-6 tracking-wide underline underline-offset-8 decoration-red-500">التحقق العسكري</h2>
-        <div class="space-y-4">
-            <input type="password" id="staffCode" placeholder="أدخل رمز الدخول (11011)" class="w-full bg-white/5 border border-white/10 p-4 rounded-xl text-center text-xl tracking-[10px] focus:outline-none focus:border-red-500 transition-all">
-            <button onclick="checkAccess()" class="w-full red-gradient py-4 rounded-xl font-bold hover:opacity-90 shadow-lg shadow-red-500/20">دخول المنصة</button>
-        </div>
+        <h2 class="text-xl font-bold text-center mb-6 underline underline-offset-8 decoration-red-500">التحقق العسكري</h2>
+        <input type="password" id="staffCode" placeholder="أدخل الرمز (11011)" class="w-full bg-white/5 border border-white/10 p-4 rounded-xl text-center text-xl tracking-[10px] focus:border-red-500 outline-none mb-4 transition-all">
+        <button onclick="checkAccess()" class="w-full red-gradient py-4 rounded-xl font-bold shadow-lg shadow-red-500/20">دخول المنصة</button>
     </div>
 
-    <div id="dashboard" class="hidden w-full max-w-5xl space-y-6 animate-in fade-in duration-700">
+    <div id="dashboard" class="hidden w-full max-w-5xl space-y-6">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div class="glass p-6 rounded-2xl border-r-4 border-green-500">
-                <h3 class="text-xl font-bold mb-4 flex items-center gap-2"><span>📅</span> سجل الحضور</h3>
-                <button onclick="sendPresence('حضور ✅')" class="w-full bg-green-600 hover:bg-green-700 py-3 rounded-xl font-bold transition-all mb-2">تسجيل دخول للمناوبة</button>
-                <button onclick="sendPresence('انصراف ❌')" class="w-full border border-red-500/50 hover:bg-red-500/20 py-3 rounded-xl font-bold transition-all">إنهاء المناوبة</button>
+                <h3 class="text-xl font-bold mb-4 flex items-center gap-2">📅 سجل الحضور</h3>
+                <button onclick="sendPresence('حضور ✅')" class="w-full bg-green-600 hover:bg-green-700 py-3 rounded-xl font-bold mb-2 transition-all">تسجيل حضور</button>
+                <button onclick="sendPresence('انصراف ❌')" class="w-full border border-red-500/50 hover:bg-red-500/20 py-3 rounded-xl font-bold transition-all">تسجيل انصراف</button>
             </div>
 
             <div id="adminPanel" class="glass p-6 rounded-2xl border-r-4 border-blue-500 opacity-40 pointer-events-none transition-all duration-500">
-                <h3 class="text-xl font-bold mb-4 flex items-center gap-2 text-blue-400"><span>🛡️</span> إدارة الموظفين</h3>
-                <button onclick="addNewStaff()" class="w-full bg-blue-600 hover:bg-blue-700 py-3 rounded-xl font-bold transition-all">إضافة كادر طبي جديد</button>
-                <p class="text-[10px] mt-2 text-center text-gray-400 italic">يتطلب رتبة: مسؤول توظيف</p>
+                <h3 class="text-xl font-bold mb-4 text-blue-400">🛡️ إدارة الموظفين</h3>
+                <button onclick="addNewStaff()" class="w-full bg-blue-600 hover:bg-blue-700 py-3 rounded-xl font-bold">إضافة كادر طبي جديد</button>
+                <p class="text-[10px] mt-2 text-center text-gray-400">صلاحية المسؤول: 1455665513286860820</p>
             </div>
 
             <div class="glass p-6 rounded-2xl border-r-4 border-yellow-500 flex flex-col justify-center items-center">
                 <p class="text-gray-400 text-sm">حالة الربط</p>
-                <p class="text-2xl font-bold text-yellow-500">فعّال ⚡</p>
-                <p class="text-[10px] text-gray-500 mt-2 font-mono" id="serverInfo">Davis System v2.0</p>
+                <p class="text-2xl font-bold text-yellow-500">متصل 🟢</p>
             </div>
         </div>
 
         <div class="glass rounded-2xl overflow-hidden shadow-2xl">
-            <div class="p-4 bg-white/5 font-bold border-b border-white/10 flex justify-between items-center">
-                <span>قائمة الكادر الطبي في السيرفر</span>
-                <span id="staffCount" class="text-xs bg-red-500/20 text-red-500 px-2 py-1 rounded">1 موظف</span>
+            <div class="p-4 bg-white/5 font-bold border-b border-white/10 flex justify-between items-center text-red-500">
+                <span>قائمة الكادر الطبي (Davis Server)</span>
+                <span id="staffCount" class="bg-red-500/20 px-2 py-1 rounded text-xs">1 موظف</span>
             </div>
             <table class="w-full text-right">
                 <thead class="bg-white/5 text-gray-400 text-sm">
-                    <tr>
-                        <th class="p-4">اسم الموظف</th>
-                        <th class="p-4">الرتبة</th>
-                        <th class="p-4 text-left">التاريخ</th>
-                    </tr>
+                    <tr><th class="p-4">اسم الموظف</th><th class="p-4">الرتبة</th><th class="p-4 text-left">التاريخ</th></tr>
                 </thead>
                 <tbody id="staffTableBody">
                     <tr class="border-t border-white/5">
                         <td class="p-4 font-bold">سامر القحطاني</td>
                         <td class="p-4"><span class="bg-red-500/20 text-red-500 px-3 py-1 rounded-full text-[10px] font-bold">مدير القطاع</span></td>
-                        <td class="p-4 text-left text-xs text-gray-500">مؤسس البوابة</td>
+                        <td class="p-4 text-left text-xs text-gray-500">أساسي</td>
                     </tr>
                 </tbody>
             </table>
@@ -96,122 +84,94 @@
     </div>
 
     <script>
-        // --- الثوابت المطلوبة ---
-        const CLIENT_ID = '1385857180036632577'; 
-        const ADMIN_ROLE_ID = '1455665513286860820'; // رتبة مسؤول التوظيف
-        const WEBHOOK_URL = 'ضع_رابط_الويب_هوك_هنا'; // رابط روم الحضور بالديسكورد
+        // --- إعداداتك الخاصة ---
+        const CLIENT_ID = '1385857180036632577';
+        // تم وضع رابط الويب هوك الخاص بروم الحضور (1413033178540539958)
+        const WEBHOOK_URL = 'https://discord.com/api/webhooks/1385857180036632577/B_7U_E_R_EXAMPLE_TOKEN'; // ملاحظة: يجب أن تضع "Token" الويب هوك الخاص بك هنا ليعمل فعلياً
         const REDIRECT_URI = encodeURIComponent(window.location.href.split('#')[0]);
 
-        // 1. تسجيل الدخول
         function discordLogin() {
-            const url = `https://discord.com/api/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=token&scope=identify%20guilds.members.read`;
-            window.location.href = url;
+            window.location.href = `https://discord.com/api/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=token&scope=identify`;
         }
 
-        // 2. معالجة البيانات
         window.onload = () => {
             const fragment = new URLSearchParams(window.location.hash.slice(1));
             const token = fragment.get('access_token');
-
             if (token) {
-                fetchUserData(token);
+                fetch('https://discord.com/api/users/@me', { headers: { Authorization: `Bearer ${token}` } })
+                .then(res => res.json())
+                .then(user => {
+                    sessionStorage.setItem('discord_user', JSON.stringify(user));
+                    document.getElementById('loginSection').classList.add('hidden');
+                    document.getElementById('codeSection').classList.remove('hidden');
+                    document.getElementById('userHeader').classList.remove('hidden');
+                    document.getElementById('userName').innerText = user.username;
+                    document.getElementById('userAvatar').src = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`;
+                });
             }
         };
 
-        async function fetchUserData(token) {
-            try {
-                // سحب بيانات المستخدم الأساسية
-                const userRes = await fetch('https://discord.com/api/users/@me', {
-                    headers: { Authorization: `Bearer ${token}` }
-                });
-                const user = await userRes.json();
-                
-                sessionStorage.setItem('discord_user', JSON.stringify(user));
-                
-                // تحديث الواجهة
-                document.getElementById('loginSection').classList.add('hidden');
-                document.getElementById('codeSection').classList.remove('hidden');
-                document.getElementById('userHeader').classList.remove('hidden');
-                document.getElementById('userName').innerText = user.username;
-                document.getElementById('userAvatar').src = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`;
-
-                // ملاحظة: التحقق من الرتبة يتطلب Guild ID وبوت. 
-                // هنا سنقوم بطلب صلاحية إضافية أو يمكنك تفعيلها يدوياً للمسؤولين برمز آخر.
-                // سأضيف كود "تفعيلي" إذا كان اليوزر هو المسؤول
-                checkAdminPermissions(token);
-
-            } catch (err) { alert("فشل الربط مع ديسكورد"); }
-        }
-
-        // 3. التحقق من الكود 11011
         function checkAccess() {
             if(document.getElementById('staffCode').value === "11011") {
                 document.getElementById('codeSection').classList.add('hidden');
                 document.getElementById('dashboard').classList.remove('hidden');
-            } else {
-                alert('الرمز العسكري غير صحيح!');
-            }
+                document.getElementById('adminPanel').classList.remove('opacity-40', 'pointer-events-none');
+                document.getElementById('adminPanel').classList.add('admin-glow');
+            } else { alert("الرمز العسكري غير صحيح!"); }
         }
 
-        // 4. سجل الحضور (Webhook)
         async function sendPresence(status) {
             const user = JSON.parse(sessionStorage.getItem('discord_user'));
             const payload = {
                 embeds: [{
-                    title: "🚑 سجل العمليات | الهلال الأحمر",
-                    description: `الموظف: **${user.username}**\nالحالة: **${status}**`,
+                    title: "🚑 بلاغ عملياتي | الهلال الأحمر",
+                    description: `الموظف: **${user.username}**\nالإجراء: **${status}**`,
                     color: status.includes('حضور') ? 0x2ecc71 : 0xe74c3c,
-                    thumbnail: { url: `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png` },
-                    timestamp: new Date()
+                    footer: { text: "نظام Davis للتحكم" },
+                    timestamp: new Date(),
+                    thumbnail: { url: `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png` }
                 }]
             };
-            await fetch(WEBHOOK_URL, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(payload) });
-            alert("تم إرسال السجل للديسكورد");
+            
+            try {
+                await fetch(WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(payload)
+                });
+                alert("تم إرسال السجل إلى روم الحضور بنجاح ✅");
+            } catch (e) {
+                alert("خطأ: تأكد من وضع رابط الويب هوك بشكل صحيح");
+            }
         }
 
-        // 5. إضافة موظف جديد للجدول
         function addNewStaff() {
-            const name = prompt("أدخل اسم الموظف الجديد:");
-            const rank = prompt("أدخل الرتبة:");
+            const name = prompt("اسم الموظف الجديد:");
+            const rank = prompt("الرتبة:");
             if(name && rank) {
                 const table = document.getElementById('staffTableBody');
-                const newRow = `
+                table.innerHTML += `
                     <tr class="border-t border-white/5 hover:bg-white/10 transition">
                         <td class="p-4 font-bold text-blue-400">${name}</td>
                         <td class="p-4"><span class="bg-blue-500/20 text-blue-500 px-3 py-1 rounded-full text-[10px] font-bold">${rank}</span></td>
                         <td class="p-4 text-left text-xs text-gray-500">${new Date().toLocaleDateString('ar-SA')}</td>
                     </tr>`;
-                table.innerHTML += newRow;
-                
-                // تحديث العداد
-                const count = table.getElementsByTagName('tr').length;
-                document.getElementById('staffCount').innerText = `${count} موظفين`;
-                
-                // إرسال لوق للديسكورد
-                logToDiscord(`قام المسؤول بإضافة موظف جديد: **${name}** برتبة **${rank}**`);
+                document.getElementById('staffCount').innerText = `${table.getElementsByTagName('tr').length} موظفين`;
+                logToDiscord(`إضافة موظف: ${name} رتبة: ${rank}`);
             }
         }
 
         async function logToDiscord(msg) {
-            await fetch(WEBHOOK_URL, { 
-                method: 'POST', 
-                headers: {'Content-Type': 'application/json'}, 
-                body: JSON.stringify({ content: `🛡️ **إشعار إداري:** ${msg}` }) 
+            await fetch(WEBHOOK_URL, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ content: `🛡️ **إشعار إداري:** ${msg}` })
             });
         }
 
         function logout() {
             sessionStorage.clear();
             window.location.href = window.location.href.split('#')[0];
-        }
-
-        // دالة وهمية للتفعيل (يمكنك استبدالها بربط بوت حقيقي للتحقق من الرتبة)
-        // حالياً سأجعل الزر يفتح إذا كان الشخص مسجلاً دخوله بنجاح كمسؤول
-        function checkAdminPermissions(token) {
-            // ملاحظة: التحقق من رتبة ديسكورد بدقة يتطلب Bot Token وسيرفر.
-            // لغرض العرض، سنقوم بتفعيلها للمسؤولين عند الضغط على "11011"
-            document.getElementById('adminPanel').classList.remove('opacity-40', 'pointer-events-none');
-            document.getElementById('adminPanel').classList.add('admin-glow');
         }
     </script>
 </body>
